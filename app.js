@@ -5,7 +5,9 @@ class App {
     this.$form = document.querySelector("#form");
     this.$noteTitle = document.querySelector("#note-title");
     this.$noteText = document.querySelector("#note-text");
+    this.$notes = document.querySelector("#notes");
     this.$formButtons = document.querySelector("#form-buttons");
+    this.$placeholder = document.querySelector("#placeholder");
 
     this.addEventListeners();
   }
@@ -47,6 +49,8 @@ class App {
     this.$form.classList.remove("form");
     this.$noteTitle.style.display = "none";
     this.$formButtons.style.display = "none";
+    this.$noteTitle.value = "";
+    this.$noteText.value = "";
   }
 
   addNote(note) {
@@ -58,6 +62,32 @@ class App {
     };
 
     this.notes = [...this.notes, newNote];
+
+    this.displayNotes();
+    this.closeForm();
+  }
+
+  displayNotes() {
+    const hasNotes = this.notes.length > 0;
+
+    this.$placeholder.style.display = hasNotes ? "none" : "flex";
+
+    this.$notes.innerHTML = this.notes
+      .map(
+        (note) => `
+        <div style="background: ${note.color}" class="note">
+            <div class="${note.title && "note-title"}">${note.title}</div>
+            <div class="note-text">${note.text}</div>
+            <div class="toolbar-container">
+                <div class="toolbar">
+                    <i class="fa-solid fa-eye-dropper toolbar-color"></i>
+                    <i class="fa-solid fa-trash toolbar-delete"></i>
+                </div>
+          </div>
+        </div>
+    `
+      )
+      .join("");
   }
 }
 
